@@ -35,6 +35,9 @@ manifest:
       url-base: https://github.com/M165437
     - name: whoop-t #new entry
       url-base: https://github.com/whoop-t #new entry
+    # - name: oxinosg
+    #   url-base: https://github.com/oxinosg
+
 
   projects:
     - name: zmk
@@ -44,12 +47,15 @@ manifest:
     - name: urchin-zmk-module
       remote: duckyb
       revision: main
-    - name: nice-view-gem
-      remote: m165437
+    # - name: nice-view-gem
+    #   remote: m165437
+    #   revision: main
+    - name: nice-adventure-time
+      remote: whoop-t
       revision: main
-    - name: nice-adventure-time #new entry
-      remote: whoop-t #new entry
-      revision: main #new entry
+    # - name: nice-adventure-time
+    #   remote: oxinosg
+    #   revision: main
 
     # ZMK modules
     - name: zmk-adaptive-key

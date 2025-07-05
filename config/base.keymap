@@ -19,14 +19,15 @@
 #define FN 2
 #define NUM 3
 #define SYS 4
-// #define MOUSE 5
 #define MOUSEL 5
 #define MOUSER 6
 
 #define XXX &none
 #define ___ &trans
 
-/* Global defaults */
+/* ======================= */
+/* === Global defaults === */
+/* ======================= */
 
 #define QUICK_TAP_MS 175
 
@@ -45,16 +46,13 @@
   quick-tap-ms = <QUICK_TAP_MS>;
 };
 
-/* Homerow mods */
+/* ==================== */
+/* === Homerow mods === */
+/* ==================== */
 
 #define KEYS_L LT0 LT1 LT2 LT3 LT4 LM0 LM1 LM2 LM3 LM4 LB0 LB1 LB2 LB3 LB4
 #define KEYS_R RT0 RT1 RT2 RT3 RT4 RM0 RM1 RM2 RM3 RM4 RB0 RB1 RB2 RB3 RB4
-#define THUMBS LH1 LH0 RH0 RH1         // Thumbs on 34 keys.
-// #ifndef LH2
-//   #define THUMBS LH1 LH0 RH0 RH1         // Thumbs on 34 keys.
-// #else
-//   #define THUMBS LH2 LH1 LH0 RH0 RH1 RH2 // Thumbs on 36+ keys.
-// #endif
+#define THUMBS LH1 LH0 RH0 RH1
 
 #define MAKE_HRM(NAME, HOLD, TAP, TRIGGER_POS)                                 \
   ZMK_HOLD_TAP(NAME, bindings = <HOLD>, <TAP>; flavor = "balanced";            \
@@ -70,13 +68,17 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L THUMBS) // Right-hand HRMs.
   MAKE_HRM(hm_combo_##NAME, &kp, TAP, SIDE THUMBS)                             \
   ZMK_COMBO_6(NAME, &hm_combo_##NAME HOLD 0, POS, LAYERS, COMBO_MS, IDLE_MS)
 
-/* Combos, leader key sequences, mouse emulation */
+/* ===================================================== */
+/* === Combos, leader key sequences, mouse emulation === */
+/* ===================================================== */
 
 #include "combos.dtsi" // Must be sourced after HRM-combo hack.
 #include "leader.dtsi"
 #include "mouse.dtsi"
 
-/* Nav cluster */
+/* =================== */
+/* === Nav cluster === */
+/* =================== */
 
 // Trigger tap-action on all interrupts.
 #define MT_CORE                                                                \
@@ -104,8 +106,11 @@ ZMK_HOLD_TAP(mt_end, bindings = <&masked_end>, <&kp>; MT_CORE)
 MASK_MODS(masked_home, (MOD_LCTL), &kp HOME)
 MASK_MODS(masked_end,  (MOD_LCTL), &kp END)
 
-/* Magic-shift & auto-layers */
+/* ================================= */
+/* === Magic-shift & auto-layers === */
+/* ================================= */
 
+// TODO perfection, set up
 // Tap: repeat after alpha, else sticky-shift |
 // Shift + tap/ double-tap: caps-word | Hold: shift.
 #define MAGIC_SHIFT &magic_shift LSHFT 0
@@ -126,6 +131,7 @@ ZMK_ADAPTIVE_KEY(
   /delete-property/ ignore-modifiers;
 };
 
+// TODO set up
 // Tap: num-word | double-tap: sticky num-layer | Hold: num-layer.
 #define SMART_NUM &smart_num NUM 0
 ZMK_HOLD_TAP(smart_num, bindings = <&mo>, <&num_dance>; flavor = "balanced";
@@ -133,15 +139,25 @@ ZMK_HOLD_TAP(smart_num, bindings = <&mo>, <&num_dance>; flavor = "balanced";
 ZMK_TAP_DANCE(num_dance, bindings = <&num_word NUM>, <&sl NUM>;
               tapping-term-ms = <200>;)
 
-// Smart-mouse, requires tri-state module.
+// Smart-mouse for left layer, requires tri-state module.
 ZMK_TRI_STATE(
-    smart_mouse, bindings = <&tog MOUSER>, <&none>, <&tog MOUSER>;
+    smart_mouse_left, bindings = <&tog MOUSEL>, <&none>, <&tog MOUSEL>;
     ignored-key-positions =
-        <LT1 LT2 LH0 LH1 RT1 RT2 RT3 RM0 RM1 RM2 RM3 RM4 RB1 RB2 RB3 RH0 RH1>;
+      <LT4 LT3 LT2 LT1 LM4 LM3 LM2 LM1 LM0 LB3 LB2 LB1 LH1 LH0>;
+    ignored-layers = <MOUSEL NAV FN>;)
+
+// Smart-mouse for left layer, requires tri-state module.
+ZMK_TRI_STATE(
+    smart_mouse_right, bindings = <&tog MOUSER>, <&none>, <&tog MOUSER>;
+    ignored-key-positions =
+      <RT4 RT2 RT1 RM4 RM3 RM2 RM1 RM0 LB3 LB2 LB1 RH1 RH0>;
     ignored-layers = <MOUSER NAV FN>;)
 
-/* Custom behaviors */
+/* ======================== */
+/* === Custom behaviors === */
+/* ======================== */
 
+// TODO check how to use
 // Alt+Tab swapper, requires tri-state module.
 ZMK_TRI_STATE(swapper, bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
               ignored-key-positions = <LT2 RT2 RM1 RM2 RM3>;)
@@ -162,21 +178,28 @@ SIMPLE_MORPH(dot_inner_morph, CTL, &kp COLON, &kp GREATER_THAN)
 // Tap: qmark | Shift + tap: excl.
 SIMPLE_MORPH(qexcl, SFT, &kp QMARK, &kp EXCL)
 
+// Tap: forward slash | Shift + tap: back slash
+SIMPLE_MORPH(qslash, SFT, &kp FSLH, &kp BSLH)
+
 // Tap: left/right parenthesis | Shft + tap: less-than/greater-than.
 SIMPLE_MORPH(lpar_lt, SFT, &kp LPAR, &kp LT)
 SIMPLE_MORPH(rpar_gt, SFT, &kp RPAR, &kp GT)
 
-// Tap: space | Shift + tap: dot -> space -> sticky shift | Hold: nav layer.
-ZMK_HOLD_TAP(lt_spc, bindings = <&mo>, <&spc_morph>; flavor = "balanced";
+// // Tap: space | Shift + tap: dot -> space -> sticky shift | Hold: nav layer.
+// Tap: space | Shift + tap: dot -> space -> sticky shift | Hold: leader key.
+// ZMK_HOLD_TAP(lt_spc, bindings = <&mo>, <&spc_morph>; flavor = "balanced";
+ZMK_HOLD_TAP(lt_spc, bindings = <&kp>, <&spc_morph>; flavor = "balanced";
              tapping-term-ms = <200>; quick-tap-ms = <QUICK_TAP_MS>;)
 SIMPLE_MORPH(spc_morph, SFT, &kp SPACE, &dot_spc)
 ZMK_MACRO(dot_spc, bindings = <&kp DOT &kp SPACE &sk LSHFT>; wait-ms = <0>;
           tap-ms = <5>;)
 
+// TODO use this for delete
 // Tap: backspace | Lshft + tap: delete | Rshft + tap: shift-delete.
 ZMK_MOD_MORPH(bs_del, bindings = <&kp BSPC>, <&kp DEL>;
               mods = <(MOD_LSFT|MOD_RSFT)>; keep-mods = <MOD_RSFT>;)
 
+// TODO remove?
 // Tap: copy | double-tap: cut.
 ZMK_TAP_DANCE(copy_cut, bindings = <&kp LC(INS)>, <&kp LC(X)>;
               tapping-term-ms = <200>;)
@@ -189,8 +212,13 @@ ZMK_TAP_DANCE(tp_f9_11, bindings = <&mt LALT F9>, <&kp F11>;
 ZMK_TAP_DANCE(tp_f10_12, bindings = <&mt LALT F10>, <&kp F12>;
               tapping-term-ms = <200>;)
 
+// TODO set up this instead of laptop fix
 // Sticky shift + leader.
 ZMK_MACRO(leader_sft, bindings = <&sk LSHFT &leader>;)
+
+// TODO set up 2 macros for:
+// ->
+// =>
 
 // Misc aliases. [TODO: clean up]
 #define CANCEL    &kp K_CANCEL            // Cancel caps-word & auto-layers.
@@ -201,9 +229,12 @@ ZMK_MACRO(leader_sft, bindings = <&sk LSHFT &leader>;)
 #define DSK_MGR   &kp LA(GRAVE)           // Desktop manager.
 #define VOL_DOWN  &hmr RSHFT C_VOL_DN
 
-/* Keymap */
+/* ============== */
+/* === Keymap === */
+/* ============== */
 
-ZMK_CONDITIONAL_LAYER(sys, FN NUM, SYS) // FN + NUM --> SYS.
+// ZMK_CONDITIONAL_LAYER(sys, FN NUM, SYS) // FN + NUM --> SYS.
+ZMK_CONDITIONAL_LAYER(sys, FN NAV, SYS) // FN + NAV --> SYS.
 
 #ifndef ZMK_BASE_LAYER
   #define ZMK_BASE_LAYER(name, LT, RT, LM, RM, LB, RB, LH, RH)                 \
@@ -316,7 +347,7 @@ ZMK_BASE_LAYER(Mouser,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     ___           ___           ___           ___           ___         ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-                                              ___           ___         ,   &mkp LCLK     &mkp MCLK
+                                              ___           ___         ,   &mkp LCLK     &mkp RCLK
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
