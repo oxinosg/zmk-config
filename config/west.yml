@@ -24,13 +24,32 @@ manifest:
   remotes:
     - name: urob
       url-base: https://github.com/urob
+    - name: caksoylar
+      url-base: https://github.com/caksoylar
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
+    - name: duckyb
+      url-base: https://github.com/duckyb
+      # nice-view-gem
+    - name: m165437
+      url-base: https://github.com/M165437
+    - name: whoop-t #new entry
+      url-base: https://github.com/whoop-t #new entry
 
   projects:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
+
+    - name: urchin-zmk-module
+      remote: duckyb
+      revision: main
+    - name: nice-view-gem
+      remote: m165437
+      revision: main
+    - name: nice-adventure-time #new entry
+      remote: whoop-t #new entry
+      revision: main #new entry
 
     # ZMK modules
     - name: zmk-adaptive-key
