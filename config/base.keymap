@@ -83,9 +83,12 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L THUMBS) // Right-hand HRMs.
 // Trigger tap-action on all interrupts.
 #define MT_CORE                                                                \
   flavor = "tap-preferred";                                                    \
-  tapping-term-ms = <220>;                                                     \
-  quick-tap-ms = <220>;                                                        \
+  tapping-term-ms = <200>;                                                     \
+  quick-tap-ms = <200>;                                                        \
   hold-trigger-key-positions = <0>;
+
+//  tapping-term-ms = <220>;                                            \
+/'  quick-tap-ms = <220>;                                                        \
 
 &mt { MT_CORE };
 
@@ -110,14 +113,14 @@ MASK_MODS(masked_end,  (MOD_LCTL), &kp END)
 /* === Magic-shift & auto-layers === */
 /* ================================= */
 
-// TODO perfection, set up
 // Tap: repeat after alpha, else sticky-shift |
 // Shift + tap/ double-tap: caps-word | Hold: shift.
 #define MAGIC_SHIFT &magic_shift LSHFT 0
 ZMK_HOLD_TAP(magic_shift, bindings = <&kp>, <&magic_shift_tap>;
-             flavor = "balanced"; tapping-term-ms = <200>;
-             quick-tap-ms = <QUICK_TAP_MS>;)
-ZMK_MOD_MORPH(magic_shift_tap, bindings = <&shift_repeat>, <&caps_word>;
+               flavor = "balanced"; tapping-term-ms = <200>;
+               quick-tap-ms = <QUICK_TAP_MS>;)
+/* ZMK_MOD_MORPH(magic_shift_tap, bindings = <&shift_repeat>, <&caps_word>; */
+ZMK_MOD_MORPH(magic_shift_tap, bindings = <&caps_word>, <&shift_repeat>;
               mods = <(MOD_LSFT)>;)
 ZMK_ADAPTIVE_KEY(
     shift_repeat, bindings = <&sk LSHFT>;
@@ -168,11 +171,39 @@ ZMK_TRI_STATE(swapper, bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
                 bindings = <BINDING1>, <BINDING2>;)
 
 // Tap: comma | Shift + tap: semicolon | Ctrl + shift + tap: <.
+
+// used to force comma to be used when gui is pressed
+// SIMPLE_MORPH(comma_gui_morph, GUI, &comma_morph, &kp COMMA)
+
+// Set up to strip other modifiers when GUI is pressed to avoid : being fired
+ZMK_MOD_MORPH(comma_gui_morph,
+  /* trigger whenever LGUI or RGUI is down */
+  mods      = <(MOD_LGUI | MOD_RGUI)>;
+  /* strip *all* but GUI when firing */
+  keep-mods = <(MOD_LGUI | MOD_RGUI)>;
+  /* fall-through → your comma_morph, hold-side → send `,` */
+  bindings  = <&comma_morph>, <&kp DOT>;
+)
+
 SIMPLE_MORPH(comma_morph, SFT, &kp COMMA, &comma_inner_morph)
+/* SIMPLE_MORPH(comma_morph, SFT, &kp COMMA, &comma_inner_morph) */
 SIMPLE_MORPH(comma_inner_morph, CTL, &kp SEMICOLON, &kp LESS_THAN)
 
+// TODO doesn't work with `shift + . + gui` instead gets `gui + :`
 // Tap: dot | Shift + tap: colon | Ctrl + shift + tap: >.
+
+/* SIMPLE_MORPH(dot_gui_morph, GUI, &dot_morph, &kp DOT) */
+ZMK_MOD_MORPH(dot_gui_morph,
+  /* trigger whenever LGUI or RGUI is down */
+  mods      = <(MOD_LGUI | MOD_RGUI)>;
+  /* strip *all* but GUI when firing */
+  keep-mods = <(MOD_LGUI | MOD_RGUI)>;
+  /* fall-through → your dot_morph, hold-side → send `.` */
+  bindings  = <&dot_morph>, <&kp DOT>;
+)
+
 SIMPLE_MORPH(dot_morph, SFT, &kp DOT, &dot_inner_morph)
+/* SIMPLE_MORPH(dot_morph, SFT, &kp DOT, &dot_inner_morph) */
 SIMPLE_MORPH(dot_inner_morph, CTL, &kp COLON, &kp GREATER_THAN)
 
 // Tap: qmark | Shift + tap: excl.
@@ -247,7 +278,7 @@ ZMK_BASE_LAYER(Base,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     &hml LGUI A   &hml LALT S   &hml LSHFT D  &hml LCTRL F  &kp G       ,   &kp H         &hmr LCTRL J  &hmr RSHFT K  &hmr LALT L   &hmr LGUI SQT ,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-    &kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp N         &kp M         &comma_morph  &dot_morph    &qexcl      ,
+    &kp Z         &kp X         &kp C         &kp V         &kp B       ,   &kp N         &kp M         &comma_gui_morph  &dot_gui_morph &qexcl ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
 //                                            &lt_spc NAV 0 &lt FN RET  ,   SMART_NUM     MAGIC_SHIFT
 //                                            &hml LGUI CAPS &lt FN BSPC,  &lt NAV RET   &hmr LGUI SPACE
