@@ -189,7 +189,6 @@ SIMPLE_MORPH(comma_morph, SFT, &kp COMMA, &comma_inner_morph)
 /* SIMPLE_MORPH(comma_morph, SFT, &kp COMMA, &comma_inner_morph) */
 SIMPLE_MORPH(comma_inner_morph, CTL, &kp SEMICOLON, &kp LESS_THAN)
 
-// TODO doesn't work with `shift + . + gui` instead gets `gui + :`
 // Tap: dot | Shift + tap: colon | Ctrl + shift + tap: >.
 
 /* SIMPLE_MORPH(dot_gui_morph, GUI, &dot_morph, &kp DOT) */
@@ -215,6 +214,11 @@ SIMPLE_MORPH(qslash, SFT, &kp FSLH, &kp BSLH)
 // Tap: left/right parenthesis | Shft + tap: less-than/greater-than.
 SIMPLE_MORPH(lpar_lt, SFT, &kp LPAR, &kp LT)
 SIMPLE_MORPH(rpar_gt, SFT, &kp RPAR, &kp GT)
+
+// Macro that types `=>`
+ZMK_BEHAVIOR(eqgt, macro, bindings = <&kp EQUAL &kp GREATER_THAN>;)
+// Macro that types `->`
+ZMK_BEHAVIOR(mngt, macro, bindings = <&kp MINUS &kp GREATER_THAN>;)
 
 // // Tap: space | Shift + tap: dot -> space -> sticky shift | Hold: nav layer.
 // Tap: space | Shift + tap: dot -> space -> sticky shift | Hold: leader key.
@@ -285,6 +289,8 @@ ZMK_BASE_LAYER(Base,
                                               &hml LGUI CAPS &lt FN BSPC,  &lt NAV RET   &lt_spc LGUI 0
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
+
+// TODO set up transparent keys for layers
 
 ZMK_BASE_LAYER(Nav,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
@@ -381,17 +387,5 @@ ZMK_BASE_LAYER(Mouser,
                                               ___           ___         ,   &mkp LCLK     &mkp RCLK
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
-
-// ZMK_BASE_LAYER(Mouse,
-// //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
-//     ___           ___           ___           ___           ___         ,   ___           &kp PG_UP     U_MS_U         &kp PG_DN    ___         ,
-// //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-//     ___           ___           ___           ___           ___         ,   U_WH_L        U_MS_L        U_MS_D         U_MS_R       U_WH_R      ,
-// //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
-//     ___           ___           ___           ___           ___         ,   ___           &mkp LCLK     &mkp MCLK      &mkp RCLK    ___         ,
-// //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-//                                               ___           ___         ,   U_WH_U        U_WH_D
-// //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
-// )
 
 /* vim: set ft=c tw=146: */
