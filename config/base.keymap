@@ -10,16 +10,16 @@
 #include "zmk-helpers/unicode-chars/greek.dtsi"
 #include "zmk-helpers/unicode-chars/german.dtsi"
 
-#define DEF 0 /* Base layer */
-#define DFA 1 /* Base + Alt layer */
-#define DFE 2 /* Base + Esc layer */
-#define NAV 3 /* Nav layer */
-#define FN 4 /* Fn layer */
-#define NUM 5 /* Num layer */
-#define SYS 6 /* Sys layer */
-#define MSL 7 /* Mouse left layer */
-#define MSR 8 /* Mouse right layer */
-#define MLA 9 /* Mouse left for Alt layer */
+#define DEF 0  /* Base layer */
+#define DFA 1  /* Base + Alt layer */
+#define DFE 2  /* Base + Esc layer */
+#define NAV 3  /* Nav layer */
+#define FN 4   /* Fn layer */
+#define NUM 5  /* Num layer */
+#define SYS 6  /* Sys layer */
+#define MSL 7  /* Mouse left layer */
+#define MSR 8  /* Mouse right layer */
+#define MLA 9  /* Mouse left for Alt layer */
 #define MRA 10 /* Mouse right for Alt layer */
 
 #define XXX &none
@@ -138,9 +138,6 @@ MAKE_HRM(hmr, &kp, &kp, KEYS_L THUMBS) // Right-hand HRMs.
   tapping-term-ms = <200>;                                                     \
   quick-tap-ms = <200>;                                                        \
   hold-trigger-key-positions = <0>;
-
-//  tapping-term-ms = <220>;                                            \
-//  quick-tap-ms = <220>;                                                        \
 
 &mt { MT_CORE };
 
@@ -297,7 +294,7 @@ ZMK_TAP_DANCE(tp_f9_11, bindings = <&mt LALT F9>, <&kp F11>;
 ZMK_TAP_DANCE(tp_f10_12, bindings = <&mt LALT F10>, <&kp F12>;
               tapping-term-ms = <200>;)
 
-#define CANCEL    &kp K_CANCEL            // Cancel caps-word & auto-layers.
+#define CANCEL &kp K_CANCEL            // Cancel caps-word & auto-layers.
 
 
 /* ============== */
@@ -348,8 +345,6 @@ ZMK_BASE_LAYER(Baseesc,
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
-// TODO set up transparent keys for layers
-
 ZMK_BASE_LAYER(Nav,
 //╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮ ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
     &kp N1        &kp N2        &kp N3        &kp N4        &kp N5      ,   &kp N6        &kp PG_UP     &kp PG_DN     &kp N9        &kp N0      ,
@@ -358,7 +353,7 @@ ZMK_BASE_LAYER(Nav,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     ___           ___           ___           ___           ___         ,   ___           &kp C_VOL_DN  &kp C_MUTE    &kp C_VOL_UP  ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-                                              ___           &kp DEL     ,   ___           CANCEL
+                                              ___           &kp DEL     ,   ___           ___
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 
@@ -382,7 +377,7 @@ ZMK_BASE_LAYER(Num,
 //├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
     ___           &kp N1        &kp N2        &kp N3        ___         ,   ___           ___           ___           ___           ___         ,
 //╰─────────────┼─────────────┴─────────────┼─────────────┼─────────────┤ ├─────────────┼─────────────┼─────────────┴───────────────────────────╯
-                                              ___           ___         ,   ___           ___
+                                              &kp N0        ___         ,   ___           CANCEL
 //                                          ╰─────────────┴─────────────╯ ╰─────────────┴─────────────╯
 )
 

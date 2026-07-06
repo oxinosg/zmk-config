@@ -2,8 +2,8 @@
 // #define ZMK_POINTING_DEFAULT_MOVE_VAL 600 // 600
 // #define ZMK_POINTING_DEFAULT_SCRL_VAL 20  // 10
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 800     // higher base cursor speed [600]
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 16      // slightly faster scroll steps [10]
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 800  // higher base cursor speed [600]
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 16   // slightly faster scroll steps [10]
 
 #include <dt-bindings/zmk/pointing.h>
 #include <input/processors.dtsi>
